@@ -47,7 +47,7 @@ gem 'bcrypt', '~> 3.1.7'
 group :test, :development do
   gem 'rspec-rails'
   gem 'database_cleaner'
-  gem 'mailcatcher'
+  #gem 'mailcatcher'
 end
 
 group :test do
