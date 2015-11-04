@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title><%= content_for?(:title) ? yield(:title) : "In His Name" %></title>
+
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "vendor/modernizr" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <style>
+ 
+   a{
+    color: #008AE6;
+  }
+  a:hover{
+    color:  #777777;
+  } 
+
+  .title-area h1{
+    color:#82aad2;
+    font-weight: bold;
+  }
+ .top-bar-section .dropdown li:not(.has-form):not(.active):hover > a:not(.button) {
+  color: #FFFFFF;
+  background-color: #777777;
+  }
+  .top-bar-section li:not(.has-form) a:not(.button):hover {
+  background: #777777;
+  }
+  ul li{
+    display: inline-block;
+  }
+  #login input{
+    display: inline-block;
+ /*   background-color: blue;*/
+  }
+  #login, #navbar a{
+    display: inline-block;
+  }
+  #login input[type='text'], #login input[type='password']{
+    width: 150px;
+  }
+  .nav_link{
+    display: inline-block;
+    margin: 5px auto;
+  }
+  .navbar{
+    float: right;
+  }
+  .box_content{
+    text-align: center;
+  }
+  .message{
+   /* position: fixed;*/
+    z-index: 10;
+    opacity: 0.8;
+  }
+  .content_list li {
+/*  list-style-type: disc;*/
+  display: list-item
+}
+.subcontent_list li{
+  list-style-type:circle;
+  display: list-item
+}
+  body{
+    /*background-color: #0099FF;*/
+    height: auto;
+    height: 100%;
+    background: linear-gradient(to bottom, #5A93CC, #5C85AD);
+  /*    background-repeat: no-repeat;*/
+  }
+
+
+ html {
+     height: auto;
+     min-height: 100%;
+  }
+  #intro_dropdown{
+    font-size: 108%;
+  }
+  #title_site{
+    font-size: 130%;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  </style>
+  <body>
+<div class='fixed'>
+<nav class="top-bar" data-topbar role="navigation">
+
+
+  <ul class="title-area">
+    
+    <li class='name'>
+      <h1 id='title_site'>In His Name We Pray</h1>
+    </li>
+
+
+     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+  </ul>
+
+
+  <section class="top-bar-section">
+    <!-- Right Nav Section -->
+    <ul class="right">
+      <% if current_user %>
+      <li class="has-dropdown">
+        <a href="#">In His Name We Pray</a>
+        <ul class="dropdown">
+          <li><a href='/requests'>Requests</a></li>
+          <li><a href='/praises'>Praises</a></li>
+        </ul>
+      </li>
+      <li class="has-dropdown">
+        <a href="#">Pray List</a>
+        <ul class="dropdown">
+          <li><a href='/users/<%= session[:user_id] %>/requests' >Requests</a></li>
+          <li><a href='/users/<%= session[:user_id] %>/subscriptions' >Subscriptions</a></li>
+          <li><a href='/users/<%= session[:user_id] %>/praises' >Praises</a></li>
+        </ul>
+      </li>
+      <li><a href="/users/<%= current_user.id %>/edit" >Profile</a></li>
+      <li>
+        <form action='/sessions' method='post' id='logout'>
+        <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+        <input type='hidden' name='_method' value='delete'>
+        <input type='submit' value='Log Out' class='button tiny'>
+       </form>
+     </li>
+    </ul>
+    <!-- Left Nav Section -->
+  <% else %>
+    <!-- Right Nav Section -->
+       <form action='/sessions' method='post' id="login">
+        <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+        <input type='text' name='email' placeholder='email'>
+        <input type='password' name='password' placeholder='password'>
+        <input type='submit' value='Log In' class='button tiny'>
+      </form>
+    </ul>
+    <!-- Left Nav Section -->
+
+  <% end %>
+    <ul class='left'>    
+     <li class="has-dropdown">
+        <a href="#" id='intro_dropdown'>Intro</a>
+        <ul class="dropdown">
+          <li><a href='/prayers/gospel'>The Gospel</li></a>
+          <li><a href='/prayers'>Prayer</a></li>
+          <li><a href='/prayers/overview'>Overview</a></li>
+        </ul>
+     </li>
+     <li class="name">
+      <h1> <a href='/users/new'>Sign Up</a></h1>
+     </li>
+    </ul>
+    </section>
+</nav>
+
+
+  <% if flash[:errors] %>
+    <div data-alert class="alert-box" class='errors'>
+      <ul class='box_content'>
+      <% flash[:errors].each do |e| %>
+        <li><%= e %></li>
+      <% end %>
+      <ul>
+      <a href="#" class="close">&times;</a>
+    </div>
+  <% end %>
+
+   <% if flash[:error] %>
+  <div data-alert class="alert-box message">
+    <p class='box_content'><%= flash[:error] %></p>
+    <a href="#" class="close">&times;</a>
+  </div>
+  <% end %>
+
+  <% if flash[:success] %>
+  <div data-alert class="alert-box success radius message">
+    <p class='box_content'><%= flash[:success] %><p>
+    <a href="#" class="close">&times;</a>
+  </div>
+  <% end %>
+
+  </div>
+    <%= yield %>
+    <%= javascript_include_tag "application" %>
+  </body>
+
+</html>

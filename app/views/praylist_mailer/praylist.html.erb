@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <style>
+  table{
+    border: 2px solid black;
+    margin: 0 auto;
+    width: 85%;
+    border-collapse: collapse;
+  }
+  th{
+    background-color: lightgrey;
+    padding: 3px;
+    line-height: 20px;
+  }
+  tr, td{
+    border: 1px solid black;
+    text-align: center;
+    font-size: 95%;
+  }
+/*  .head{
+    height: 30px;
+  }*/
+  </style>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Hi, <%= @user.first_name %></h1>
+    <p>
+      Your weekly praylist digest:
+      <table>
+      <col width='20%'>
+      <col width='60%'>
+        <tr>
+          <th>Requestor</th>
+          <th>Request</th>
+        </tr>
+        <tr class='head'>
+          <th colspan='2'>
+          <h4>Request Subscriptions</h4>
+          </th>
+        </tr>
+      <% @user.subscriptions.active.each do |subscription| %>
+        <tr>
+          <td>
+          <%= subscription.request.firstname ? subscription.request.user.first_name : subscription.request.user.username %> 
+          </td>
+          <td>
+              <p><%= subscription.request.content %></p>
+              <p>
+                <strong><%= subscription.request.request %></strong>
+              </p>
+            </td>
+        </tr>
+        <% end %>
+        <tr class='head'>
+          <th colspan='2'>
+          <h4>Prayed Requests</h4>
+          </th>
+        </tr>
+      <% if @user.email_prays == true 
+          @user.prayers.each do |prayer|
+            if prayer.updated_at > Time.now - 1.week %>
+        <tr>
+        <td><%= prayer.request.firstname ? prayer.request.user.first_name : prayer.request.user.username %></td>
+        <td><%= prayer.request.content %></p></td>
+        </tr>
+        <%  end 
+          end 
+        end %>
+    </table>
+     </p>
+     <p>In His name, we pray.</p>
+     <p>Thank you for praying for your church family.</p>
+  </body>
+  </html>

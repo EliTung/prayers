@@ -1,0 +1,82 @@
+<style>
+*{
+	font-family: arial;
+}
+
+#error{
+	color: blue;
+}
+
+ #log{
+/*	display: inline-block;*/
+	vertical-align: top;
+	margin: 40px;
+	border: 10px solid #555555;
+	border-radius: 10px;
+	padding: 10px;
+	text-align: center;
+	background:#A9A9A9;
+/*	#62B2FF;*/
+}
+
+#container{
+	width: 60%;
+	margin: 20px auto;
+	margin-top: 200px;
+}
+
+#passreset{
+	font-size: 70%;
+	float: right;
+}
+#btn_login{
+	width: 300px;
+	font-size: 110%;
+}
+#login_inputs{
+	width: 350px;
+	margin: auto;
+}
+#login_inputs label{
+	text-align: left;
+}
+
+
+
+</style>
+<h2></h2>
+
+
+
+<div id='container'>
+
+<form id='log' action='/sessions' method='post'>
+	<h2>Log In</h2>
+	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+		<div id='login_inputs'>
+			<div class='row'>
+				<div class='small-12 columns'>
+				<label for='email'>Email
+				<input type='text' name='email' id='email' placeholder='email' class='input_login'>
+				</label>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='small-12 columns'>
+				<label for='password'>Password
+				<span id='passreset'>Forgot Password? <a href='/password/email'>Reset Password</a></span>
+				<input type='password' name='password' id='password' placeholder='password' class='input_login'>
+				</label>
+			</div>
+		</div>
+		<p id='error'>
+		 <% if flash[:error] %>
+		 <%= flash[:error] %>
+		 <% end %>
+		</p>
+	<input type='submit' value='Log In' id='btn_login' class='button tiny'>
+	<br>
+	Don't have an account? <a href="/users/new">Register</a>
+</form>
+</div>
+

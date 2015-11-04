@@ -1,0 +1,8 @@
+C:/jruby-9.0.0.0/bin/jruby.exe -r ./siteconf20151103-4004-15esks5.rb extconf.rb
+NotImplementedError: C extensions are not supported
+    <top> at C:/jruby-9.0.0.0/lib/ruby/stdlib/mkmf.rb:1
+  require at org/jruby/RubyKernel.java:940
+   (root) at C:/jruby-9.0.0.0/lib/ruby/stdlib/rubygems/core_ext/kernel_require.rb:1
+    <top> at extconf.rb:1
+
+extconf failed, exit code 1

@@ -1,0 +1,141 @@
+<style>
+#btn_submit{
+	float: right;
+	margin-right: 130px;
+/*	margin: 5px auto;*/
+/*	margin-left: 200px;*/
+}
+#pass_link{
+  float: right;
+  margin-top: 20px;
+  margin-right: 80px;
+}
+</style>
+
+<a id='pass_link' href='/users/password' class='button tiny'>Change Password</a>
+<br>
+<br>
+<br>
+
+<form action='/users/<%= current_user.id %>' method='post'>
+<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+<input type='hidden' name='_method' value='patch'>
+
+<div class='row'>
+	  <div class="small-6 columns">
+      <label>First Name
+        <input type="text" placeholder="first name" name='user[first_name]' id='first_name' value='<%= current_user.first_name %>'>
+      </label>
+    </div>
+    <div class="small-6 columns">
+      <label>Last Name
+        <input type="text" placeholder="last name" name='user[last_name]' id='last_name' value='<%= current_user.last_name %>'>
+      </label>
+    </div>
+</div>
+<div class='row'>
+	  <div class="small-6 columns">
+      <label>Email
+        <input type="text" placeholder="email" name='user[email]' id='email' value='<%= current_user.email %>'>
+      </label>
+    </div>
+    <div class="small-6 columns">
+      <label>Username
+        <input type="text" placeholder="username" name='user[username]' id='username' value='<%= current_user.username %>'>
+      </label>
+    </div>
+</div>
+<div class='row'>
+	  <div class="small-4 columns">
+      <label>City
+        <input type="text" placeholder="city" name='user[city]' id='city' value='<%= current_user.city %>'>
+      </label>
+    </div>
+    <div class="small-4 columns">
+      <label>State
+        <input type="text" placeholder="state" name='user[state]' id='state' value='<%= current_user.state %>'>
+      </label>
+    </div>
+     <div class="small-4 columns">
+      <label>Zip
+        <input type="number" placeholder="zip" name='user[zipcode]' id='zipcode' value='<%= current_user.zipcode %>'>
+      </label>
+    </div>
+</div>
+<div class='row'>
+	<fieldset>
+	  <legend>Church</legend>
+	  <div class="small-4 columns">
+      <label>Church
+        <input type="text" placeholder="church" name='user[church]' id='church' value='<%= current_user.church %>'>
+      </label>
+      </div>
+    <div class="small-4 columns">
+      <label>Campus
+        <input type="text" placeholder="church campus" name='user[church_campus]' id='church_campus' value='<%= current_user.church_campus %>'>
+      </label>
+      </div>
+     <div class="small-4 columns">
+      <label>Fellowship
+        <input type="text" placeholder="fellowship" name='user[fellowship]' id='fellowship' value='<%= current_user.fellowship %>'>
+      </label>
+      </div>
+  	</fieldset>
+</div>
+  <div class='row'>
+
+  	<fieldset>
+	  <legend>Email - Subscription</legend>
+  	 <div class="small-8 columns">
+  	  	<p>Please mark 'yes' if you would like to receive weekly emails for your subscribed prayers.
+  	  		Your PrayList or subscribed requests will be included in your weekly emails for a certain number of specificed weeks. Additionally, you will receive an email whenever a subscribed prayer request is closed (when the requestor has posted the result of that request).
+  	  	</p>
+  	  </div>
+	  <div class="small-4 columns">
+      <label>
+      	<br>
+      <input type='radio' name='user[email_subs]' id='email_subs' value='true' 
+      <%= 'checked' if current_user.email_subs == true %> >Yes
+      <input type='radio' name='user[email_subs]' id='email_subs' value='false'
+      <%= 'checked' if current_user.email_subs == false %> >No
+   	
+      </label>
+      <label>Subscription Frequency (# of Weeks)
+        <input type="text" placeholder="small-4.columns" name='user[subs_frq]' id='subs_frq' value='<%= current_user.subs_frq %>'> 
+      </label>
+      </div>
+	</fieldset>
+	</div>
+	<div class='row'>
+		<fieldset>
+		<legend>Email - Prayers</legend>
+		<div class='small-8 columns'>
+			<p>Please mark 'yes' if you would like to include the requests that you prayed for during the week to be included in that week's email (it will only be included on that week).
+			</p>
+		</div>
+ 		<div class="small-4 columns">
+      <input type='radio' name='user[email_prays]' id='email_prays' value='true' 
+      <%= 'checked' if current_user.email_prays == true %> >Yes
+      <input type='radio' name='user[email_prays]' id='email_prays' value='false'
+      <%= 'checked' if current_user.email_prays == false %> >No
+    </div>
+    </fieldset>
+   </div>
+   <div class='row'>
+   	<fieldset>
+   	<legend>Email - Comments</legend>
+   	<div class='small-8 columns'>
+   		<p>Please mark 'yes' if you would like emails to be sent to you whenever someone has posted a comment on your prayer requests.
+   	</div>
+   	<div class="small-4 columns">
+      <input type='radio' name='user[email_comms]' id='email_comms' value='true' 
+      <%= 'checked' if current_user.email_comms == true %> >Yes
+      <input type='radio' name='user[email_comms]' id='email_comms' value='false'
+      <%= 'checked' if current_user.email_comms == false %> >No
+    </div>
+    </fieldset>
+</div>
+	
+<input type='submit' value='Update' class='button' id='btn_submit'>
+</form>
+

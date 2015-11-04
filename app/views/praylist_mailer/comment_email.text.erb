@@ -1,0 +1,10 @@
+Hi, <%= @user.first_name %>
+==========================
+  <% if @comment.firstname = true %>
+  <%= @comment.user.first_name %>
+  <% else %>
+  <%= @comment.user.username %>
+  <% end %> has commented on your your request:
+  <%= @comment.content %>
+
+ We hope it was an encouragement to you.

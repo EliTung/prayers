@@ -1,0 +1,93 @@
+<style>
+h2{
+  text-align: center;
+}
+.request_info{
+  margin: auto;
+  text-align: center;
+  width: 50%;
+  background: lightgrey;
+  border: 5px solid black;
+  padding: 5px;
+}
+
+.comment_entry{
+  text-align:center;
+  border: 2px solid black;
+  width:60%;
+  margin: 5px auto;
+  background-color:#DADADA;
+}
+.errors{
+  color: red;
+  width: 60%;
+  margin: 2px auto;
+/*  border: 1px solid black;
+  padding: 2px;
+  background-color:white;*/
+
+}
+.errors ul{
+  font-size: 75%;
+}
+.pray_form, .subs_form,.btn_comment{
+  display: inline-block;
+}
+</style>
+<br>
+<br>
+<br>
+<h2>Prayer Request</h2>
+
+ 	<div class='request_info'>
+   <%= @request.prayers.sum(:pr_count) %> prayers
+   <p>"<%= @request.content %>"</p>
+   <p class='request'><strong><%= @request.request %></strong></p>
+   <p>
+     <%= @request.firstname ? @request.user.first_name : @request.user.username %>,  <%= @request.created_at.to_s(:short) %>
+    <br>
+    <%= @request.user.city %>,  <%= @request.user.state %> 
+   </p>
+
+   <% unless @request.user == current_user %>
+   <form class='pray_form' action='/requests/<%= @request.id %>/pray' method='post'>
+   	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+    <input type='hidden' name='filter' value='comment'>
+	  <input type='submit' value='Pray' class='button tiny'>
+   </form>
+   <form class='subs_form' action='/requests/<%= @request.id %>/subscribe' method='post'>
+    <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+    <input type='hidden' name='filter' value='comment'>
+    <input type='submit' value='Subscribe' class='button tiny'>
+   </form>
+   <% end %>
+   <a href="#" data-reveal-id="modalComment" class='button tiny btn_comment'>Comment</a>
+
+
+   <div id="modalComment" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle">Comment</h2>
+
+    <form action='/requests/<%= @request.id %>/comment' method='post' >
+    <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden"></label>
+    <label for='content'>Encourage me, please!  
+    <textarea id='content' name='content' id='new_comment'></textarea>
+    <br>
+    <input type='radio' name='firstname' value='true' checked>First Name: <%=current_user.first_name %>
+    <br>
+    <input type='radio' name='firstname' value='false'>Username:  <%=current_user.username %>
+    <br>
+    <input type='submit' value='Post Comment' class='button tiny'>
+    </form>
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+  </div>
+
+
+  </div>
+
+
+ <% @request.comments.each do |comment|%>
+ <div class='comment_entry'>
+  <p class='comment_content'><%= comment.content %></p>
+  <%= comment.firstname ? comment.user.first_name : comment.user.username %>, <%= comment.created_at.to_s(:short) %>
+  </div>
+ <% end %> 

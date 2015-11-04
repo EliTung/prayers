@@ -1,0 +1,184 @@
+<style>
+h2{
+  text-align:center;
+}
+
+.request_entry{
+  text-align: center;
+  border: 3px solid #666666;
+  background: white;
+/*  width: 40%;*/
+  margin: 5px auto;
+  padding: 8px;
+  height: 320px;
+}
+.pray_form, .subscribe_form{
+  display: inline-block;
+}
+.req_resp{
+  font-size:90%;
+}
+.req_user{
+  font-size:90%;
+}
+.req_text{
+  height: 100px;
+  overflow: auto;
+  width: 95%;
+}
+.praise_content{
+  overflow:auto;
+  height: 120px;
+}
+.praise_content p{
+  font-size: 85%;
+}
+.praise_result{
+  font-weight:bold;
+}
+
+.btn_entry{
+  display: inline-block;
+  margin: 5px;
+}
+#adv_search,#filter{
+  display: inline-block;
+  vertical-align: top;
+}
+#filter{
+  float: left;
+}
+#adv_search{
+  float: right;
+}
+#heading{
+  margin: 0 auto;
+  text-align: center;
+  width: 75%;
+}
+#search{
+  width: 450px;
+  height: 230px;
+  margin: 0px auto;
+/*    background-color: blue;*/
+}
+#search input{
+  width: 85%;
+  height: 85%;
+}
+
+#adv_search_content{
+  display: inline-block;
+  width: 650px;
+}
+
+#drop_search{
+  background-color: white;
+  width: 500px;
+  height: 280px;
+}
+#btn_search{
+  width: 60px;
+}
+</style>
+
+<br>
+
+<h2>Request Praises!</h2>
+
+
+<div id='heading'>
+  <dl class="sub-nav">
+    <dt>Filter:</dt>
+    <dd class="<%= 'active' if !@filter %>"><a href="/praises">All</a></dd>
+    <dd class="<%= 'active' if @filter == 'church' %>"><a href="/praises/church">Church</a></dd>
+    <dd class="<%= 'active' if @filter == 'city' %>"><a href="/praises/city">City</a></dd>
+  </dl>
+
+  <div id='adv_search'>
+    <a data-dropdown="drop_search" data-options="align:left" aria-controls="drop2" aria-expanded="false" class='button tiny'>Advanced Search</a>
+    <div id="drop_search" data-dropdown-content class="f-dropdown content large" aria-hidden="true" tabindex="-1">
+       <div id="search">
+          <p> Please input information about the prayer requestor </p>
+         <form action='/requests/search' method='post'>
+          <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+           <div class='row'>
+            <div class='small-6 column'>
+                <input type='text' name='first_name' class='small end' placeholder="first name">
+            </div>
+            <div class='small-6 column'>
+                 <input type='text' name='last_name'  class='small end' placeholder="last name">
+             </div>
+           </div>
+          <div class='row'>
+            <div class='small-6 column'>
+                 <input type='text' name='church' class='small' placeholder='church name'>
+            </div>
+            <div class='small-6 column'>
+                <input type='text' name='church_campus' class='small' placeholder='church campus'>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='small-4 column'>
+                 <input type='text' name='city' class='small' placeholder='city'>
+            </div>
+            <div class='small-4 column'>
+                 <input type='text' name='state' class='small' placeholder='state'>
+            </div>
+            <div class='small-4 column'>
+                <input type='number' name='zipcode' class='small' placeholder='zipcode'>
+            </div>
+          </div>
+          <input type='submit' value='Search' id='btn_search' class='button tiny'>
+         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class='row'>
+      <div class="small-12 column">
+         <%= will_paginate @requests, renderer: FoundationPagination::Rails %>
+        <ul class='small-block-grid-3'>
+         <%  @requests.each do |praise| %>
+          <li>
+          <div class='request_entry'>
+           <p class='req_resp'>
+           <%= praise.prayers.sum(:pr_count) %> prayers
+           </p>
+           <div class='praise_content'>
+             <p class='praise_result'>"<%= praise.result %>"</p>
+             <p class='praise_text'>"<%= praise.content %>"</p>
+           </div>
+           <p class='req_user'>
+             <%= praise.firstname ? praise.user.first_name : praise.user.username %>, <%= praise.created_at.to_s(:short) %>
+            <br>
+            <%= praise.user.city %>,  <%=praise.user.state %></p>
+            <a href='/requests/<%= praise.id %>/comments'>Comments</a>
+            <br>
+             <div class='btn_entry'>
+               <% unless praise.user == current_user %>
+                  <form class='pray_form' action='/requests/<%= praise.id %>/pray' method='post'>
+                  <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+                  <input type='submit' value='Pray' class='button tiny'>
+                 </form>
+               <% end %>
+             </div>
+           </div>
+          </li>
+         <% end %>
+        </ul>
+         <%= will_paginate @requests, renderer: FoundationPagination::Rails %>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+

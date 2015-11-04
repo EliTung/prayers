@@ -1,0 +1,25 @@
+Hi, <%= @user.first_name %>
+===============================================
+This is your weekly WePray praylist digest:
+
+Subscribed Requests:
+     <% @user.subscribed_requests.each do |request| %>
+     <%= subscription.request.firstname ? subscription.request.user.first_name : subscription.request.user.username %> 
+	 <%= request.content %>
+     <%= subscription.request.content %>
+	 <%= subscription.request.request %>
+      <% end %>
+
+Prayed Requests:
+      <% if @user.email_prays == true 
+          @user.prayers.each do |prayer|
+            if prayer.updated_at > Time.now - 1.week %>
+     	<%= prayer.request.firstname ? prayer.request.user.first_name : prayer.request.user.username %>
+     	<%= prayer.request.content %>
+        <%  end 
+          end 
+        end %>
+ 
+Thanks for praying for your church family!
+
+

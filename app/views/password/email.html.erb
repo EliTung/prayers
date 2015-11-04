@@ -1,0 +1,24 @@
+<style>
+h2{
+	text-align: center;
+}
+table{
+	margin: auto;
+}
+#pass_form{
+	margin: 0 auto;
+	width: 20%;
+}
+#btn_reset{
+	margin-left: 250px;
+}
+</style>
+
+<h2>Reset Password </h2>
+<div id='pass_form'>
+	<form action='/password/email' method='post'>
+		<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+		<input type='text' name='email' placeholder='email'>
+		<input type='submit' value='Reset' class='button tiny' id='btn_reset'>
+	</form>
+</div>

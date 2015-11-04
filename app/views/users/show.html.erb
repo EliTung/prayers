@@ -1,0 +1,324 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src= 'http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'>
+    </script>
+
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+
+   </script>
+<script  type="text/javascript">
+</script>
+
+<style>
+.head h2{
+	text-align:center;
+}
+.tabs{
+	width: 48%;
+	margin: auto;
+/*	border: 2px solid black;*/
+}
+#personal_requests, #prayed_requests,{
+	display: inline-block;
+	vertical-align: top;
+}
+a {
+	text-decoration: none;
+	color: #008AB8;
+}
+a:hover{
+	color: #4DB8FF;
+}
+#btn_add{
+	margin-left: 100px;
+	/*margin: 0 auto;*/
+}
+.content{
+	margin: 0 auto;
+}
+/*.tabs-content{
+	padding: 20px;
+}*/
+table{
+	width: 85%;
+	margin: 0 auto;
+}
+table th{
+	text-align: center;
+}
+.subs_form, .pray_form{
+	display: inline-block;
+}
+.btn_entry{
+  display: inline-block;
+  margin: 5px;
+}
+.btn_status{
+	display: inline-block;
+}
+#personal_requests{
+	margin: auto;
+	width: 100%;
+}
+.tabs li{
+	width: 200px;
+	text-align: center;
+}
+.content{
+	height: 95%;
+	/*background-color:blue;*/
+	overflow: auto;
+}
+.sub_content{
+	font-size: 90%;
+}
+
+#last, #test{
+	float: right;
+}
+.sub_response{
+	float: right;
+	margin-left: 5px;
+	font-size:80%;
+}
+.request_result, .request_content{
+	font-size: 90%;
+}
+</style>
+<br>
+<br>
+<div class='head'>
+	<h2>Hi, <%= current_user.first_name %></h2>
+
+	<ul class="tabs" data-tab>
+ 	  <li class="tab-title <%= 'active' if @tab == 'requests' %>"><a href="#requests">My Requests</a></li>
+	  <li class="tab-title <%= 'active' if @tab == 'subscriptions' %>"><a href="#subscriptions">Subscriptions</a></li>
+	  <li class="tab-title <%= 'active' if @tab == 'praises' %>"><a href="#praises">Praises</a></li>
+	</ul>
+</div>
+<div class="tabs-content">
+  <div class="content <%= 'active' if @tab == 'requests' %>" id="requests">
+	
+	<div id='personal_requests'>
+		<a href="#" data-reveal-id="reqModal" class='button tiny' id='btn_add'>Add a Prayer Request</a>
+		 <div id="reqModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+		  <h2 id="req_prayer">Prayer</h2>
+	  		<form action='/requests' method='post' >
+			<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">	
+			<h3><label for='content'>Request Details</label></h3>
+			<textarea id='content' name='content' id='content'></textarea>
+			<h3>
+			<label for='content'>How can we specifically pray for you?</label></h3>
+			<textarea id='request' name='request' id='request'></textarea>
+			<label for='topic'>Topic</label><input type='text' name='topic'>
+			<br>
+			<div class='row'>
+				<div class='small-4 columns'>
+					<h3><label for='firstname'>Posted as:</h3>
+					<input type='radio' name='firstname' value='true' checked>First Name: <%= current_user.first_name %>
+					<br>
+					<input type='radio' name='firstname' value='false'>Username: <%= current_user.username %>
+				</div>
+				<div class='small-8 columns'>					
+				<label for='visible'>Visibility (restrict which group that you share will be able to see your post): </label>
+				<select name='visible'>
+					<option value='nil'>all</option>
+					<option value='fellowship'>fellowship only</option>
+					<option value='church'>church only</option>
+					<option value='city'>city only</option>
+				</select>
+				</div>
+			</div>
+			<input type='submit' value='Post' class='button tiny'>
+			</form>
+		  <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+		</div>
+
+		<table>
+		    <col width='15%'>
+	   		<col width='60%'>
+   			<col width='25%'>
+			<tr>
+				<th>Date Requested</tH>
+				<th>Prayer Request</th>
+				<th>Action </th>
+			</tr>		
+			<% if @requests
+				@requests.each do |request| %>
+				<tr>
+					<td><%= request.created_at.to_s(:short) %></td>
+					<td> 
+						<div class='sub_response'>
+							<%= request.prayers.sum(:pr_count) %> Prayers 
+							<br>
+							<a href='/requests/<%= request.id %>/comments'>Details</a>
+						</div>
+						<%= request.content %>
+		      			<br>
+		      			<strong><%= request.request %></strong>
+		  			</td>
+					<td>				
+					<a href="#" data-reveal-id="praiseModal<%= request.id %>" class='button tiny btn_status'>Praise!</a>
+					<a href="#" data-reveal-id="editModal<%= request.id %>" class='button tiny btn_status'>Edit</a>
+					<form method='post' action='/requests/<%= request.id %>' class='btn_status'>
+						<input type='hidden' name='_method' value='delete'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">	
+						<input type='submit' value="Delete" class='button tiny'>
+					</form>
+					</td>
+				</tr>
+					<!-- Modal for request edit -->
+					<div id="editModal<%= request.id %>" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+					  <h2 class="modalTitle">Prayer</h2>
+				  		<form action='/requests/<%= request.id %>/update' method='post' >
+				  		<input type='hidden' name='_method' value='patch'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">	
+						<h3><label for='req_content'>Detail</label></h3>				
+						<textarea id='content' name='content' id='req_content'><%= request.content %></textarea>
+						<h3><label for='request'>Request</label></h3>			
+						<textarea id='request' name='request' id='req_request'><%= request.request %></textarea>
+						<h3><label for='topic'>Topic</label></h3>				
+						<input type='text' id='topic' name='topic' id='req_topic' value='<%= request.topic %>'>
+						<br>
+						<div class='row'>
+							<div class='small-4 columns'>
+							<h3><label for='name'>Displayed As:</label></h3>
+							<input type='radio' name='firstname' value='true' 
+							<%= 'checked' if request.firstname == true %> >
+							First Name: <%= current_user.first_name %>
+							<br>
+							<input type='radio' name='firstname' value='false' 
+							<%= 'checked' if request.firstname == false %> >Username: <%= current_user.username %>
+							</div>
+							<div class='small-8 columns'>					
+								<label for='visible'>Visibility (restrict which group that you share will be able to see your post): </label>
+								<select name='visible'>
+									<option value='nil' <%= 'selected' if request.visible == nil %> >all</option>
+									<option value='fellowship' <%= 'selected' if request.visible == 'fellowship' %> >fellowship only</option>
+									<option value='church' <%= 'selected' if request.visible == 'church' %> >church only</option>
+									<option value='city' <%= 'selected' if request.visible == 'city' %> >city only</option>
+									
+								</select>
+							</div>
+						</div>
+						<input type='submit' value='Update' class='button tiny'>
+						</form>
+					  <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+					</div>
+					<!-- Modal for request praise -->
+					<div id="praiseModal<%= request.id %>" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+					  <h2 class="modalTitle">Praise!</h2>
+				  		<form action='/requests/<%= request.id %>/praise' method='post' >
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">	
+						<p><%= request.content %></p>
+						<h3><label for='req_praise'>What was God's answer? How was God glorified?</label></h3>				
+						<textarea id='praise' name='praise' id='req_praise'></textarea>
+						<br>
+						<input type='submit' value='Praise' class='button tiny'>
+						</form>
+					  <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+					</div>
+				<% end %>
+			<% end %>
+		</table>
+ 	</div>
+
+  </div>
+  <div class="content <%= 'active' if @tab == 'subscriptions' %>" id="subscriptions">
+
+	<div id='prayed_requests'>
+		<table>
+			<col width='15%'>
+	   		<col width='55%'>
+   			<col width='5%'>
+   			<col width='25%'>
+			<tr>
+				<th>Requestor</th>
+				<th>Prayer Request</th>
+				<th>Weeks</th>
+				<th>Action</th>
+			</tr>
+		<% if @subscriptions
+			@subscriptions.each do |sub| %>
+			<tr class='subs_request_entry'>
+
+				<td>
+		     		<%= sub.request.firstname ? sub.request.user.first_name : sub.request.user.username %>
+		     		<br>
+            		<%= sub.request.created_at.to_s(:short) %>
+            	</td>
+				<td class='sub_content'>
+					<div class='sub_response'>
+						<%= sub.request.prayers.sum(:pr_count) %> Prayers 
+						<br>
+						<a href='/requests/<%= sub.request.id %>/comments'>Details</a>
+					</div>
+					<%= sub.request.content %>
+					<br>
+					<strong><%= sub.request.request %></strong>	
+				</td>
+				<td><%= sub.week_count %></td>
+				<td>
+					<form method='post' action='/subscriptions/<%= sub.request.id %>/decr' class='subs_form'>
+						<input type='hidden' name='_method' value='patch'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">	
+						<input type='submit' value="-" class='button tiny'>
+					</form>
+					<form method='post' action='/subscriptions/<%= sub.request.id %>/incr' class='subs_form'>
+						<input type='hidden' name='_method' value='patch'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">	
+						<input type='submit' value="+" class='button tiny'>
+					</form>
+					<form method='post' action='/subscriptions/<%= sub.request.id %>/renew' class='subs_form'>
+						<input type='hidden' name='_method' value='patch'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">	
+						<input type='submit' value="&#x021BB" class='button tiny'>
+					</form>
+					<form method='post' action='/subscriptions/<%= sub.request.id %>' class='subs_form'>
+						<input type='hidden' name='_method' value='delete'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">	
+						<input type='submit' value="X" class='button tiny'>
+					</form>
+				</td>
+			</tr>
+			<% end %>
+			<% end %>
+ 		</table>
+  </div>
+
+  </div>
+  <div class="content <%= 'active' if @tab == 'praises' %>" id="praises">
+   
+	<div id='praise_requests'>
+		<table>
+			<col width='20%'>
+	   		<col width='70%'>
+	   		<col width='10%'>
+			<tr>
+				<th>Requestor</th>
+				<th>Praise</th>
+				<th>Details</th>
+				</tr>
+		<% if @praise_requests
+				@praise_requests.each do |praise| %>
+				<tr>
+					<td>
+					 <%= praise.firstname ? praise.user.first_name : praise.user.username %>
+            			<br>
+           			<%= praise.created_at.to_s(:short) %>
+					</td>
+					<td>
+						<p class='request_result'> <strong><%= praise.result %></strong></p>
+						<p class='request_content'> <%= praise.content %> </p>	
+					</td>
+					<td>
+						<%= praise.prayers.sum(:pr_count) %> prayers
+						<a href='/requests/<%= praise.id %>/comments'>Comments</a>
+					</td>
+			 </tr>
+				<% end %>
+			<% end %>
+		</table>
+	  </div>
+
+  </div>
+</div>

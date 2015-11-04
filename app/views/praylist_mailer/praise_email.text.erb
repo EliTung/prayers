@@ -1,0 +1,25 @@
+Hi, <%= @user.first_name %>
+
+    <% if @request.firstname = true %>
+      <%= @request.user.first_name %>
+     <% else %>
+      <%= @request.user.username %>
+     <% end %> closed a prayer request.
+     <br>
+     <% if @request.firstname = true %>
+     <%= @request.user.first_name %>
+      <% else %>
+      <%= @request.user.username %>
+      <% end %>says:
+          
+          <%= @request.result %>
+      
+        This was in response to his request:
+         <%= @request.content %>
+ 
+      Thank you so much for praying for 
+       <% if @request.firstname = true %>
+           <%= @request.user.first_name %>
+        <% else %>
+            <%= @request.user.username %> 
+        <% end %>. Praise God for everything He does!

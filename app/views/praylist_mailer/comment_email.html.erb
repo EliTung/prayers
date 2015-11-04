@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <style>
+  table{
+    border: 2px solid black;
+  }
+  tr, td{
+    border: 1px solid black;
+    text-align: center;
+  }
+  </style>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Hi, <%= @user.first_name %></h1>
+    <p>
+          
+       <%= @comment.firstname ? @comment.user.first_name : @comment.user.username %> has commented on your your request:
+          <br>
+        <%= @comment.content %>
+    </p>
+    <p>We hope it was an encouragement to you.</p>
+  </body>
+  </html>

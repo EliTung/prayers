@@ -1,0 +1,90 @@
+<style>
+h2{
+	text-align: center;
+	margin-top: 120px;
+}
+#reg{
+	width: 60%;
+	margin: 0 auto;
+	border: 10px solid #555555;
+	border-radius: 10px;
+	padding: 20px;
+	padding-bottom:40px;
+	background:#A9A9A9;
+}
+.desc{
+	font-size: 75%;
+}
+
+#btn_join{
+	float:right;
+	margin-right: 15px;
+	width: 200px;
+}
+#required{
+	margin-left: 30px;
+}
+</style>
+
+<h2>Register </h2>
+<div id='reg_form'>
+<form id='reg' action='/users' method='post'>
+	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+	<div class='row'>
+		<div class='small-6 columns'>
+			<label for='first_name'>First Name *</label></th>
+			<input type='text' name='first_name' id='first_name' placeholder='first name'>
+		</div>
+		<div class='small-6 columns'>
+			<label for='last_name'>Last Name *</label>
+			<input type='text' name='last_name' id='last_name' placeholder='last name'></td>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='small-6 columns'>
+		<label for='email'>Email *</label>
+			<input type='text' name='email' id='email' placeholder='email'>
+		</div>
+		<div class='small-6 columns'>
+		<label for='username'>Username *</label>
+			<input type='text' name='username' id='username' placeholder='username'>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='small-4 columns'>
+		<label for='city'>City</label>
+			<input type='text' name='city' id='city' placeholder='city'>
+		</div>
+		<div class='small-4 columns'>
+		<label for='state'>State</label>
+		<input type='text' name='state' id='state' placeholder='state'>
+		</div>
+		<div class='small-4 columns'>
+		<label for='zip'>Zip</label></th>
+		<input type='number' name='zip' id='zip' placeholder='zip code'></td>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='small-6 columns'>
+		<label for='church'>Church</label>
+		<input type='text' name='church' id='church' placeholder='church'>
+		</div>
+		<div class='small-6 columns'>
+		<label for='church'>Church Campus <span class='desc'>(if your church has multiple locations)</span></label>
+		<input type='text' name='church_campus' id='campus' placeholder='church campus'>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='small-6 columns'>
+		<label for='password'>Password *</label></th>
+		<input type='password' name='password' id='password' placeholder='password'>
+		</div>
+		<div class='small-6 columns'>
+		<label for='passconf'>Password (Confirmation)*</label>
+		<input type='password' name='password_confirmation' id='passconf' placeholder='confirmation'>
+		</div>
+	</div>
+	<span id='required'>* required</span>
+	<input type='submit' value='Join!' class='button tiny' id='btn_join'>
+</form>
+</div>
