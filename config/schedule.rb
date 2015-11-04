@@ -3,6 +3,10 @@
 # It's helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
 
+every :sunday, :at => '3am' do
+	rake 'send_digest_email'
+end
+
 # Example:
 #
 # set :output, "/path/to/my/cron_log.log"

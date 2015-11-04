@@ -54,6 +54,10 @@ group :test do
   gem 'capybara'
 end
 
+group :production do
+  gem 'whenever'
+end
+
 gem 'hirb'
 
 gem 'foundation-rails', '~> 5.4.5' 
