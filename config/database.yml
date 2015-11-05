@@ -88,6 +88,6 @@ production:
   <<: *default
   adapter: postgresql
   encoding: unicode
-  database: d3hkptmn8reudo
+  database: prayers_production
   username: inhisname
   password: 
