@@ -6,7 +6,7 @@ class PasswordController < ApplicationController
 	def emailreset
 		user = User.find_by(email: params[:email])
 		user.send_password_reset if user
-		# user.password_reset_sent_at = time.now
+		user.password_reset_sent_at = Time.now
 		flash[:success] = 'An email has been sent with instructions to reset your password.'
 		redirect_to '/sessions/new'
 	end
@@ -17,7 +17,7 @@ class PasswordController < ApplicationController
 
 	def reset
 		@user = User.find_by_password_reset_token!(params[:reset_token])	
-		if @user.password_reset_sent_at > 2.hours.ago
+		if Time.now - @user.password_reset_sent_at > 2.hours
 			flash[:error] = 'Password reset has expired.'
 			redirect_to '/users/password/email'
 		elsif params[:password] == params[:password_confirmation]
